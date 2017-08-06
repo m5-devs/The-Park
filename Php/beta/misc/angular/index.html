@@ -1,0 +1,57 @@
+<html lang="en" >
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Angular Material style sheet -->
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.css">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body ng-app="directoryApp" ng-cloak>
+    <div layout="column" layout-fill>
+        <div ng-controller="navController">
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <md-button ng-click="openLeftNav()" class="md-icon-button" aria-label="Menu">
+                        <md-icon class="material-icons">menu</md-icon>
+                    </md-button>
+                    <span>Directory App</span>
+                    <!-- fill up the space between left and right area -->
+                    <span flex></span>
+                </div>
+            </md-toolbar>
+
+            <md-sidenav md-component-id="left" class="md-sidenav-left">
+                <md-list>
+                    <md-list-item ng-href="/test">
+                        <md-icon class="material-icons">home</md-icon>
+                        <p>Navigate</p>
+                    </md-list-item>
+                </md-list>
+            </md-sidenav>
+        </div>
+        
+        <md-content ng-controller="main">
+            <ul>
+				<li ng-repeat="person in people">{{person.name}}</li>
+			</ul>
+			<input type="text" ng-model="query">
+        </md-content>
+		<md-content ng-view>
+		
+		</md-content>
+    </div>
+      
+	<!-- Angular Libraries -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-animate.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-aria.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.js"></script>
+
+	<!-- Angular Material Library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.js"></script>
+  
+	<!-- Bootstrap Javascript -->
+	<script src="app.js"></script>
+</body>
+</html>

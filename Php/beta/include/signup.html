@@ -1,0 +1,51 @@
+<div style="margin: 0 auto; padding: 0px 80px 20px 80px;">
+    <form id="signupform" class="col s12">
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="firstname" type="text" class="validate">
+                <label for="firstname">First Name</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="lastname" type="text" class="validate">
+                <label for="lastname">Last Name</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="email" type="email" class="validate">
+                <label for="email">Email</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="username" type="text" class="validate" autocomplete="off">
+                <label for="username">Username</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="password" type="password" class="validate" autocomplete="off">
+                <label for="password">Password</label>
+            </div>
+        </div>
+        <button type="submit" class="green waves-effect waves-light btn">Sign Up</button>
+        <a class="waves-effect waves-dark btn-flat" onmouseup="$('#signupmodal').closeModal();">Cancel</a>
+    </form>
+</div>
+
+<script>
+	$('#signupform').submit(function() {
+		$.post('../php/signup.php',{
+			firstname: $(this).find('#firstname').val(),
+			lastname: $(this).find('#lastname').val(),
+			email: $(this).find('#email').val(),
+			username: $(this).find('#username').val(),
+			password: $(this).find('#password').val()
+		}, function (data) {
+			var json = $.parseJSON(data);
+			if (json.close == 'true') {
+				$('#signupmodal').closeModal();
+			}
+			Materialize.toast(json.msg, 5000);
+		});
+		return false;
+	})
+</script>

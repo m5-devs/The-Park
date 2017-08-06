@@ -1,0 +1,62 @@
+{
+	"staff": [
+		{
+			"fname": "Gregor",
+			"lname": "Rinke",
+			"img": "https://media.licdn.com/mpr/mpr/shrinknp_200_200/p/7/000/1c9/3f3/1cb0486.jpg",
+			"position": "CEO",
+			"description": "Gregor Rinke is known as an expert in production of wood and dedicated biomass pellet. In addition to his leadership role as our CEO, he manages the Team for all projects as the knowledge provider. He has also spearheaded project engineering for development of biomass and energy production from biomass. Rinke’s overriding mission is to guide the company’s start-up and strategic growth to support its mission, while balancing the goals of operating profitably and sustainably."
+		},
+		{
+			"fname": "Karl-Heinz",
+			"lname": "Schulz",
+			"img": "http://www.seeger-greenenergy.com/assets/user/media/resized/160x0_Aboutus.outeam_.KHS_.png",
+			"position": "COO and Executive VP of Business Development",
+			"description": "After studying mechanical engineering, Karl-Heinz (Charlie) Schulz joined Schelling Anlagenbau GmbH in Austria, and then moved to the U.S. to work for Schelling America. He ran his own company, Schulz Consulting, and worked for Biesse America Inc., the Charlotte subsidiary of Biesse S.p.A., before assuming his current leadership position in renewable energy with Seeger Green Energy. A team of engineers from Seeger Green Energy’s parent company in Germany provides on-demand support to enhance project outcomes."
+		}
+	],
+	"leadership": [
+		{
+			"fname": "Klaus",
+			"lname": "Seeger",
+			"img": "http://lorempixel.com/75/75/people",
+			"position": "Supervisory Board"
+		},
+		{
+			"fname": "Erich",
+			"lname": "Klebe",
+			"img": "http://lorempixel.com/75/75/people",
+			"position": "Supervisory Board"
+		},
+		{
+			"fname": "Werner",
+			"lname": "Schauerte",
+			"img": "http://lorempixel.com/75/75/people",
+			"position": "Supervisory Board"
+		},
+		{
+			"fname": "Thomas",
+			"lname": "Reimann",
+			"img": "http://lorempixel.com/75/75/people",
+			"position": "Supervisory Board"
+		},
+		{
+			"fname": "Gunther",
+			"lname": "Cramer",
+			"img": "http://lorempixel.com/75/75/people",
+			"position": "Supervisory Board"
+		},
+		{
+			"fname": "Manfred",
+			"lname": "Kaser",
+			"img": "http://lorempixel.com/75/75/people",
+			"position": "Supervisory Board"
+		},
+		{
+			"fname": "Frank",
+			"lname": "Huckschlag",
+			"img": "http://lorempixel.com/75/75/people",
+			"position": "Managing Board"
+		}
+	]
+}

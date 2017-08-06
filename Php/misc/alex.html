@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test</title>
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,500,500italic,400italic,300italic,300' rel='stylesheet' type='text/css'>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="http://www.youtube.com/player_api"></script>
+
+	<style>
+		* { padding: 0; margin: 0; font-family: Roboto, Arial, Sans-Serif; color: #000; }
+		body {
+			background-image: url("https://media.giphy.com/media/Vuw9m5wXviFIQ/giphy.gif");
+			background-size: cover;
+		}
+		a { text-decoration: none; }
+
+		nav {
+			animation-name: rainbow;
+			animation-duration: .2s;
+    		animation-iteration-count: infinite;
+    		font-size: 20px;
+    		position: relative;
+    		z-index: 9;
+		}
+		ul { list-style-type: none; display: inline; }
+		@keyframes rainbow {
+			0%   {background-color: red; }
+			25%  {background-color: yellow; }
+			50%  {background-color: lightgreen; }
+			75%  {background-color: blue; }
+			100% {background-color: red; }
+		}
+		#navlist { position: relative; bottom: 15px; }
+		#navlist li { display: inline; margin: 0px 20px; }
+
+		.card {
+			background: #fff;
+			padding: 10px 20px;
+			margin-bottom: 30px;
+			-webkit-box-shadow: 0px 3px 10px -1px rgba(0,0,0,0.59);
+			   -moz-box-shadow: 0px 3px 10px -1px rgba(0,0,0,0.59);
+					box-shadow: 0px 3px 10px -1px rgba(0,0,0,0.59);
+		}
+
+		.container {
+			width: 70%;
+			margin: 0 auto;
+		}
+		.section { margin: 15px 0px; }
+
+		.content-container { position: relative; }
+		.content {
+			transition: ease-in-out all; transition-duration: 500ms; position: absolute; z-index: 5;
+			left: 0;
+			right: 0;
+			top: 10%;
+			margin-left: auto;
+			margin-right: auto;
+			max-width: 800px;
+		}
+		.content.hidden { transform: translate3d(0,-300%,0); }
+	</style>
+</head>
+	
+<body>
+	<nav class="card">
+		<img src="http://i.imgur.com/XtGnc70.png" style="width: 50px;"/>
+		<ul id="navlist">
+			<li><a href="#home">Home</a></li>
+			<li><a href="#college">College Page</a></li>
+			<li><a href="#career">Career Page</a></li>
+			<li><a href="#free">Free for all</a></li>
+		</ul>
+	</nav>
+
+	<div class="content-container">
+	<div id="home" class="content card container">
+		<div class="section">
+			<h2><a href="http://thepark.site/">Alex Wohlbruck</a></h2>
+		</div>
+		<div class="section">
+			<h3>Favorite Quotes</h3>
+			<ul>
+				<li>Bears. Beets. Battlestar Galactica. - Jim Halpert</li>
+				<li>Any dog under fifty pounds is a cat and cats are useless. - Ron Swanson</li>
+				<li>There must be a mistake. You've accidentally given me the food that my food eats. - Ron Swanson</li>
+			</ul>
+		</div>
+		<div class="section">
+			<h3>Hobbies</h3>
+			<ul>
+				<li>Programming</li>
+				<li>Graphic Design</li>
+				<li>Food</li>
+			</ul>
+		</div>
+	</div>
+
+	<div id="college" class="content card container hidden">
+		<div class="section">
+			<h2><a href="http://thepark.site/">Colleges</a></h2>
+		</div>
+		<div class="section">
+			<h3>Potential choices</h3>
+			<ul>
+				<li>NC State</li>
+				<li>MIT</li>
+				<li>Idk very many colleges</li>
+			</ul>
+		</div>
+	</div>
+
+	<div id="career" class="content card container hidden">
+		<div class="section">
+			<h2><a href="http://thepark.site/">Career Goals</a></h2>
+		</div>
+		<div class="section">
+			<h3>Professions:</h3>
+			<ul>
+				<li>Web and app development</li>
+				<li>UX design</li>
+				<li>Motion graphics</li>
+			</ul>
+		</div>
+	</div>
+
+	<div id="free" class="content card container hidden">
+		<iframe style="width: 100%; height: 600px; border: 4px solid red;" src="https://www.youtube.com/embed/4ZXPP7qMSz4" frameborder="0" allowfullscreen></iframe>
+	</div>
+	</div>
+
+	<script type="text/javascript">
+	var state = {
+		navigate: function(newstate) {
+			this.clear();
+			var waitTime = $('.content').css('transition-duration');
+				waitTime = (parseFloat(waitTime.substring(0, waitTime.length - 1)))*1000;
+			if (newstate) {
+				var that = this;
+				history.pushState(null, newstate, newstate);
+				setTimeout(function() {
+					$('.content'+newstate).removeClass('hidden');
+				}, waitTime);
+			}
+		},
+		clear: function() {
+			$('.content:not(.hidden)').addClass('hidden');
+		}
+	}
+
+	$(function() {
+	})
+	
+	window.onpopstate = function() {
+		var newState = window.location.hash;
+		state.navigate(newState)
+	};
+
+	// 	window.addEventListener('popstate', function(event) {
+	// 		console.log('popstate fired!');
+	// 		updateContent(event.state);
+	// 	});
+		
+	// 	$(function() {
+	// 		history.pushState({'pageId':1}, 'Test', 'test.html');
+	// 	})
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Book Search</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
+
+	<style>
+		#title {
+			margin: 0px 0px 20px 0px;
+			font-size: 30px;
+		}
+		#search {
+			position: fixed;
+			top: 40%; left: 50%;
+			transform: translate(-50%, -50%);
+			padding: 40px;
+			width: 600px;
+			transition: 300ms ease-in-out all;
+			z-index: 10;
+		}
+		#search.top {
+			top: 0%;
+			transform: translate(-50%, 0%);
+			margin: 0;
+			width: 100%;
+			padding: 20px;
+		}
+		#title.top { margin: 0px 0px 0px 0px; }
+		#search-input {
+			max-width: 500px;
+			display: block;
+			margin: 0 auto;
+			margin-bottom: 20px;
+			transition: 200ms ease-in-out all;
+		}
+		#search-input-placeholder { position: absolute; left: 0px; transform: translate(60px, 12px); opacity: .4; }
+		#results {
+			margin: 0 auto;
+			top: 220px;
+		}
+		.grid-sizer,
+		.grid-item {
+			width: 20%;
+		}
+		/* clearfix */
+		.grid:after {
+		  content: '';
+		  display: block;
+		  clear: both;
+		}
+		.grid-item {
+			width: 250px;
+			float: left;
+			margin-bottom: 20px;
+		}
+		.card .card-title { text-shadow: 0px 1px 1px rgba(0, 2, 0, 0.8); }
+		a { color: inherit; }
+		.card .card-image img { filter: brightness(65%); -webkit-filter: brightness(65%); }
+		.card-content.fade:after { 
+			position: absolute;
+			bottom: 0;  
+			height: 100%;
+			width: 100%;
+			right: 0px;
+			content: "";
+			background: linear-gradient(to top, rgba(255,255,255, 1) 25px, rgba(255,255,255,0) 80px);
+		}
+		.card-content p { overflow: hidden; max-height: 200px; text-overflow: ellipsis; }
+		.result-author { margin-top: 0; font-size: 18px; font-weight: 500; }
+		.result-genre { font-size: 14px; font-weight: 500; }
+
+	</style>
+</head>
+<body class="blue">
+
+<div id="search" class="card center">
+	<h4 id="title">Book Search</h4>
+	<form id="search-form">
+		<span id="search-input-placeholder"></span>
+		<input type="text" id="search-input"/>
+		<a id="search-dropdown" class='dropdown-button btn-flat blue-text' href='#' data-selected="false" data-activates='search-genre' style="line-height:27px;"><span>Genre</span> <i class="material-icons" style="position:relative;top:2px;">arrow_drop_down</i></a>
+		<input type="submit" id="search-submit" value="Search Books" class="btn blue"/>
+	</form>
+</div>
+
+<!-- Search by dropdown items -->
+<ul id="search-genre" class="dropdown-content">
+	<li><a id="genre-nonfiction">Non-Fiction</a></li>
+	<li><a id="genre-fiction">Fiction</a></li>
+	<li><a id="genre-drama">Drama</a></li>
+	<li><a id="genre-romance">Romance</a></li>
+	<li><a id="genre-horror">Horror</a></li>
+	<li><a id="genre-travel">Travel</a></li>
+</ul>
+
+<div id="results" class="grid">
+	<div class="grid-sizer"></div>
+</div>
+
+<script>
+	var exampleSearches = ['A Christmas Carol by Charles Dickens','Lord of the Flies','Shakespeare','The Giver','The Hunger Games','Suzanne Collins','Fault in our Stars','Non-fiction','Fiction','Fantasy','Science-fiction','Adventure','Twilight','To Kill a Mockingbird','Harry Potter','The Davinci Code','Divergent','The Lightning Theif','Harper Lee'];
+
+	//Document ready
+	$(function() {
+		//Cycle through example searches in placholder for search box
+		setInterval(function() {
+			$('#search-input-placeholder').fadeOut('medium', function() {
+				$(this).text('"' + exampleSearches[Math.floor(Math.random() * exampleSearches.length)] + '"');
+			})
+			if (!$("#search-input").is(":focus") && $('#search-input').val().length == 0) {
+				$('#search-input-placeholder').fadeIn('medium');
+			}
+		}, 5000);
+
+		loadMsnry();
+	})
+
+	$('#search-input').focus(function() {
+		$('#search-input-placeholder').fadeOut('fast', function() { $(this).css({'display':'none'}); });
+	});
+	$('#search-input').focusout(function() {
+		$('#search-input-placeholder').delay(3000).fadeIn('fast', function() { $(this).css({'display':'inline-block'}); });
+	})
+
+	//Search form submit
+	$('#search-form').submit(function() {
+		search($('#search-input').val());
+		return false;
+	});
+
+	$('#search-genre li a').click(function() {
+		var genre = $(this).attr('id');
+		genre = genre.substring(genre.indexOf("-") + 1);
+		$('#search-dropdown span').text(genre.toUpperCase());
+		$('#search-dropdown').data('selected',genre);
+	});
+
+	//Get data from Google Books api
+	function search(query) {
+		removeResults();
+		query = encodeURI(query);
+		var category = $('#search-dropdown').data('selected'),
+			url = 'https://www.googleapis.com/books/v1/volumes?q='+query;
+		if (category) {
+			//Search specific category
+			url += '+subject:'+category;
+		}
+		$.getJSON(url, function(data) {
+			createResults(data)
+		});
+	}
+
+	function createResults(data) {
+		$('#search, #title').addClass('top');
+		var img, title, author, category, desc;
+
+		$.each(data.items, function(i, v) {
+			if (typeof(v.volumeInfo.imageLinks.smallThumbnail) != 'undefined') { img = v.volumeInfo.imageLinks.smallThumbnail; } else { img = null; }
+			if (typeof(v.volumeInfo.title) != 'undefined') { title = v.volumeInfo.title; } else { title = null; }
+			if (typeof(v.volumeInfo.authors) != 'undefined') { author = v.volumeInfo.authors[0]; } else { author = null; }
+			if (typeof(v.volumeInfo.categories) != 'undefined') { category = v.volumeInfo.categories[0]; } else { category = null; }
+			if (typeof(v.volumeInfo.description) != 'undefined') { desc = v.volumeInfo.description; } else { desc = null; }
+
+			//$('#results').append(v.volumeInfo.title + '<br/>');
+			var $item = $('<a href="book.html?id='+v.id+'">'+
+			'<div class="grid-item card waves-effect waves-light">'+
+				'<div class="card-image">'+
+					'<img src="'+img+'">'+
+					'<span class="card-title">'+title+'</span>'+
+				'</div>'+
+				'<div class="card-content">'+
+					'<h5 class="result-author">'+author+'</h5>'+
+					'<h5 class="result-genre">'+category+'</h5>'+
+					'<p>'+desc+'</p>'+
+				'</div>'+
+				// '<div class="card-action">'+
+				// 	'<a href="#"></a>'+
+				// '</div>'+
+			'</div></a>');
+			$('#results').append($item).masonry('appended', $item, true);
+		});
+		loadMsnry();
+
+		//Set overflow fades on results
+		$.each('.card-content', function(){
+			alert('test');
+			var $this = $(this);
+			if ($this.offsetHeight < $this.scrollHeight || $this.offsetWidth < $this.scrollWidth) {
+				//Overflows
+				$this.addClass('fade');
+			}
+		});
+
+		// var state = { 'page_id': 1, 'user_id': 5 };
+		// var title = 'Hello World';
+		// var url = 'hello-world.html';
+
+		// history.pushState(state, title, url);
+
+		setInterval(function() {
+			setTimeout(function(){ loadMsnry(); },5000);
+		}, 500);
+		
+	}
+
+	function removeResults() {
+		var children = $('.grid').children();
+		$.each(children, function() {
+			$('.grid').masonry('remove', $(this));
+		})
+	}
+
+	//Hide header on scroll down, reveal on scroll up
+	var lastScrollTop = 1;
+	$(window).scroll(function(){
+		var st = $(this).scrollTop();
+		if (st > lastScrollTop) { 
+			hideHeader();
+		} else {
+			showHeader();
+		}
+		lastScrollTop = st;
+	});
+	function hideHeader() {
+		$('#search').css({'transform':'translate(-50%, -200px)'});
+	}
+	function showHeader() {
+		$('#search').css({'transform':'translate(-50%, 0px)'});
+	}
+
+	function loadMsnry() {
+		$('.grid').masonry({
+			itemSelector: '.grid-item',
+			columnWidth: 250,
+			isFitWidth: true,
+			gutter: 20
+		});
+	}
+</script>
+</body>
+</html>

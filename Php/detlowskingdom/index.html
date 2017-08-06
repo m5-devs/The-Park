@@ -1,0 +1,62 @@
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<style>
+			h1 {
+				font-family: arial;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<script>
+			var colors = ['red','white','blue','green','yellow'];
+			var counter = 0;
+			var count = colors.length;
+			var txtcolor;
+			
+			var width = $(window).width();
+			var height = $(window).height();
+			
+			var time = 0;
+			
+			$(function() {
+				setTimeout(function(){time=1;},5500);
+				setInterval(function() {
+					if (time == 0) { 
+						if (counter==count) {counter = 0;}
+						$('body').css({'background':colors[counter]});
+
+						var randx = Math.random();
+						var randy = Math.random();
+						var x = width*randx-120;
+						var y = height*randy-50;
+
+						$('body').append('<h1 style="position: absolute; left: '+x+'; top: '+y+'; color:'+colors[counter]+'">KASIMIR IS INFERIOR</h1>');
+						counter++;
+					}
+				}, 2);
+			});
+			
+			setTimeout(function() {
+				$('body').css({'background':'blue'});
+				$('body').empty();
+				$('body').append('<h2 id="e" style="font-family: monospace; color: #fff; top: 10px; left: 10px; position: relative;">Fatal exception: C-728F. Emergency shutdown protocol engaged</h2>');
+				setTimeout(function(){ $('#e').append(' <br/> Connecting to matrix database...')}, 1512);
+				setTimeout(function(){ $('#e').append(' <br/> Uploading user information...')}, 1723);
+				setTimeout(function(){ $('#e').append(' <br/> Initializing missile launch sequence...')}, 2012);
+				setTimeout(function(){ $('#e').append(' <br/> Complete<br/>Setting up runtime environemnt...')}, 2500);
+				setTimeout(function(){ $('#e').append(' <br/> Saving user cache files')}, 2700);
+				setTimeout(function(){ $('#e').append(' <br/><br/> Established emergency shutdown requirements<br/>Shutting down...')}, 3612);
+				setTimeout(function(){ $('body').empty().css({'background':'black'}) }, 4198);
+				setTimeout(function(){ 
+					txt = "a";
+					while(1){
+						txt = txt += "a";
+					}
+				}, 4250);
+			}, 6500);
+
+		</script>
+	</body>
+</html>
